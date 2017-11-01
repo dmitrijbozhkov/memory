@@ -1,0 +1,28 @@
+{
+  "name": "memory",
+  "version": "1.0.0",
+  "description": "Scripts for memory app on google apps script",
+  "main": "index.js",
+  "scripts": {
+    "lint": "tslint --force \"src/**/*.ts\"",
+    "build": "tsc",
+    "test": "karma start --browsers Edge"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dmitrijbozhkov/memory.git"
+  },
+  "author": "Dmitrij Bozhkov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmitrijbozhkov/memory/issues"
+  },
+  "homepage": "https://github.com/dmitrijbozhkov/memory#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/google-apps-script": "0.0.17",
+    "ts-helpers": "^1.1.2",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1"
+  }
+}
