@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+  <script>
+    var DEVELOPER_KEY = "AIzaSyDOX40cVp1zPHRf8CIrM2Xb6CpTR1_n8Uk";
+    var DIALOG_DIMENSIONS = {width: 600, height: 425};
+    var pickerApiLoaded = false;
+    var pickedFile = "";
+    var notChosen = false;
+    function onApiLoad() {
+      gapi.load('picker', {'callback': function() {
+        pickerApiLoaded = true;
+      }});
+     }
+    function getOAuthToken() {
+      document.getElementById('result').innerHTML = "";
+      if (notChosen) {
+        toggleNotChosen();
+        notChosen = false;
+      }
+      google.script.run.withSuccessHandler(createPicker)
+          .withFailureHandler(showError).getOAuthToken();
+    }
+    function createPicker(token) {
+      if (pickerApiLoaded && token) {
+        var picker = new google.picker.PickerBuilder()
+            .addView(google.picker.ViewId.DOCUMENTS)
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .hideTitleBar()
+            .setOAuthToken(token)
+            .setDeveloperKey(DEVELOPER_KEY)
+            .setCallback(pickerCallback)
+            .setOrigin(google.script.host.origin)
+            .setSize(DIALOG_DIMENSIONS.width - 2,
+                DIALOG_DIMENSIONS.height - 2)
+            .build();
+        picker.setVisible(true);
+      } else {
+        showError('Unable to load the file picker.');
+      }
+    }
+    function pickerCallback(data) {
+      var action = data[google.picker.Response.ACTION];
+      var doc = data[google.picker.Response.DOCUMENTS][0];
+      if (action == google.picker.Action.PICKED) {
+        pickedFile = doc[google.picker.Document.URL];
+        var fileLink = document.getElementById("chosenFile");
+        fileLink.innerHTML = doc[google.picker.Document.URL];
+        fileLink.href = doc[google.picker.Document.URL];
+      }
+    }
+    function closeModal() {
+      google.script.host.close();
+    }
+    function showError(message) {
+      document.getElementById('result').innerHTML = 'Ошибка: ' + message;
+    }
+    function addTemplate() {
+      if (pickedFile) {
+        google.script.run.withSuccessHandler(closeModal).setTemplate(pickedFile);
+      } else {
+        notChosen = false;
+        toggleNotChosen();
+      }
+    }
+    function toggleNotChosen() {
+      if (!notChosen) {
+        document.getElementById("notChosen").style.display = "block";
+      } else {
+        document.getElementById("notChosen").style.display = "none";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div>
+    <div class="block">
+        <h3>Выберите документ на диске:</h3>
+        <button onclick='getOAuthToken()'>Обзор</button>
+    </div>
+    <div class="block">
+      <span>Выбранный файл:</span>
+      <a id="chosenFile" target="_blank"></a>
+    </div>
+    <div class="block">
+      <button class="action" onclick="addTemplate()">Добавить</button>
+      <button onclick="closeModal()">Отмена</button>
+      <span style="display:none" id="notChosen" class="error">Файл не выбран</span>
+      <span id="result" class="error"></span>
+    </div>
+  </div>
+  <script src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+</body>
+</html>
