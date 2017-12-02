@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "tslint --force \"src/**/*.ts\"",
     "build": "tsc",
-    "test": "karma start --browsers Edge"
+    "build-term-template": "node ./src/terms/templates/build.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "dependencies": {},
   "devDependencies": {
     "@types/google-apps-script": "0.0.17",
+    "handlebars": "^4.0.11",
     "ts-helpers": "^1.1.2",
     "tslint": "^5.8.0",
     "typescript": "^2.6.1"
