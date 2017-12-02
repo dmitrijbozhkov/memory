@@ -4,7 +4,16 @@ function getSheet() {
     return SpreadsheetApp.openById(SHEET_ID);
 }
 function doGet(event) {
-    return HtmlService.createHtmlOutput("<h1>Super page</h1>");
+    switch (event.parameter.menu) {
+        case "lang":
+            return HtmlService.createTemplateFromFile("languages").evaluate();
+        case "dict":
+            return HtmlService.createTemplateFromFile("dictionaries").evaluate();
+        case "learn":
+            return HtmlService.createTemplateFromFile("learn").evaluate();
+        default:
+            return HtmlService.createTemplateFromFile("main").evaluate();
+    }
 }
 function doPost(event) {
     return ContentService.createTextOutput("pepe");

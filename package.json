@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "tslint --force \"src/**/*.ts\"",
     "build": "tsc",
-    "build-term-template": "node ./src/terms/templates/build.js"
+    "build-term-template": "node ./src/terms/templates/build.js",
+    "build-terms": "npm run build && npm run build-term-template"
   },
   "repository": {
     "type": "git",

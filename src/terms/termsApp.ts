@@ -19,7 +19,16 @@ function getSheet(): GoogleAppsScript.Spreadsheet.Spreadsheet {
 }
 
 function doGet(event: IReqEvent): GoogleAppsScript.HTML.HtmlOutput {
-    return HtmlService.createHtmlOutput("<h1>Super page</h1>");
+    switch (event.parameter.menu) {
+        case "lang":
+            return HtmlService.createTemplateFromFile("languages").evaluate();
+        case "dict":
+            return HtmlService.createTemplateFromFile("dictionaries").evaluate();
+        case "learn":
+            return HtmlService.createTemplateFromFile("learn").evaluate();
+        default:
+            return HtmlService.createTemplateFromFile("main").evaluate();
+    }
 }
 
 function doPost(event: IReqEvent): GoogleAppsScript.Content.TextOutput {
