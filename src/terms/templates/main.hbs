@@ -5,12 +5,7 @@
   </head>
   <body>
     {{>navbar}}
-    <div class="jumbotron">
-        <h2>Приложение для заучивания определений на разных языках</h2>
-        <p>Тут находится статистика обучения</p>
-    </div>
-    <p><?= "Super duper string" ?></p>
-    <p><?= DoStuff() ?></p>
+    <div class="container" id="pageContent"></div>
     {{>scripts}}
     <script>{{{code}}}</script>
   </body>

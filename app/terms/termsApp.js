@@ -4,17 +4,26 @@ function getSheet() {
     return SpreadsheetApp.openById(SHEET_ID);
 }
 function doGet(event) {
-    switch (event.parameter.menu) {
-        case "lang":
-            return HtmlService.createTemplateFromFile("languages").evaluate();
-        case "dict":
-            return HtmlService.createTemplateFromFile("dictionaries").evaluate();
-        case "learn":
-            return HtmlService.createTemplateFromFile("learn").evaluate();
-        default:
-            return HtmlService.createTemplateFromFile("main").evaluate();
-    }
+    return HtmlService.createTemplateFromFile("main").evaluate();
 }
 function doPost(event) {
     return ContentService.createTextOutput("pepe");
+}
+function navigate(path) {
+    var template;
+    switch (path) {
+        case "lang":
+            template = "languages";
+            break;
+        case "dict":
+            template = "dictionaries";
+            break;
+        case "learn":
+            template = "learn";
+            break;
+        case "stat":
+            template = "statistics";
+            break;
+    }
+    return HtmlService.createTemplateFromFile(template).evaluate().getContent();
 }

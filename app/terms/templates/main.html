@@ -8,34 +8,58 @@
   </head>
   <body>
     <nav class="navbar navbar-dark bg-primary navbar-expand-md">
-        <a href="?" class="navbar-brand">Terms</a>
+        <a href="#" class="navbar-brand" id="stat-nav">Terms</a>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbar">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbar">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a href="?menu=lang" class="nav-link">Языки</a>
+                    <a href="#" class="nav-link" id="lang-nav">Языки</a>
                 </li>
                 <li class="nav-item">
-                    <a href="?menu=dict" class="nav-link">Словари</a>
+                    <a href="#" class="nav-link" id="dict-nav">Словари</a>
                 </li>
                 <li class="nav-item">
-                    <a href="?menu=learn" class="nav-link">Учить</a>
+                    <a href="#" class="nav-link" id="learn-nav">Учить</a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div class="jumbotron">
-        <h2>Приложение для заучивания определений на разных языках</h2>
-        <p>Тут находится статистика обучения</p>
-    </div>
-    <p><?= "Super duper string" ?></p>
-    <p><?= DoStuff() ?></p>
+    <div class="container" id="pageContent"></div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <script>console.log("super duper scripts");
+    <script>/// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
+var Paths;
+(function (Paths) {
+    Paths[Paths["lang"] = 0] = "lang";
+    Paths[Paths["dict"] = 1] = "dict";
+    Paths[Paths["learn"] = 2] = "learn";
+    Paths[Paths["stat"] = 3] = "stat";
+})(Paths || (Paths = {}));
+(function () {
+    function setContent(template) {
+        document.getElementById("pageContent").innerHTML = template;
+    }
+    $("#lang-nav").click(function (event) {
+        event.preventDefault();
+        google.script.run.withSuccessHandler(setContent).navigate(Paths[0]);
+    });
+    $("#dict-nav").click(function (event) {
+        event.preventDefault();
+        google.script.run.withSuccessHandler(setContent).navigate(Paths[1]);
+    });
+    $("#learn-nav").click(function (event) {
+        event.preventDefault();
+        google.script.run.withSuccessHandler(setContent).navigate(Paths[2]);
+    });
+    $("#stat-nav").click(function (event) {
+        event.preventDefault();
+        google.script.run.withSuccessHandler(setContent).navigate(Paths[3]);
+    });
+    google.script.run.withSuccessHandler(setContent).navigate(Paths[3]);
+})();
 </script>
   </body>
 </html>

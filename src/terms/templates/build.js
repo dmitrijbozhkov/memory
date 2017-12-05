@@ -35,6 +35,7 @@ var main = readTemplate("main.hbs");
 var dictionaries = readTemplate("dictionaries.hbs");
 var languages = readTemplate("languages.hbs");
 var learn = readTemplate("learn.hbs");
+var statistics = readTemplate("statistics.hbs");
 
 // Register partials
 hs.registerPartial("navbar", nav);
@@ -49,9 +50,11 @@ var compMain = hs.compile(main)({ code: mainCode });
 var compDictionaries = hs.compile(dictionaries)();
 var compLanguages = hs.compile(languages)();
 var compLearn = hs.compile(learn)();
+var compStat = hs.compile(statistics)();
 
 // Write results
 fs.writeFileSync(outPath + "main.html", compMain);
 fs.writeFileSync(outPath + "dictionaries.html", compDictionaries);
-fs.writeFileSync(outPath + "languages.html", languages);
-fs.writeFileSync(outPath + "learn.html", learn);
+fs.writeFileSync(outPath + "languages.html", compLanguages);
+fs.writeFileSync(outPath + "learn.html", compLearn);
+fs.writeFileSync(outPath + "statistics.html", compStat);
