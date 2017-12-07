@@ -29,9 +29,6 @@ function doPost(event: IReqEvent): GoogleAppsScript.Content.TextOutput {
 function navigate(path: string) {
     let template;
     switch (path) {
-        case "lang":
-            template = "languages";
-            break;
         case "dict":
             template = "dictionaries";
             break;

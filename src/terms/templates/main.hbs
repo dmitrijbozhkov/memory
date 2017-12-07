@@ -5,7 +5,9 @@
   </head>
   <body>
     {{>navbar}}
-    <div class="container" id="pageContent"></div>
+    <div class="container">
+      <div class="row row-offcanvas row-offcanvas-right" id="pageContent"></div>
+    </div>
     {{>scripts}}
     <script>{{{code}}}</script>
   </body>

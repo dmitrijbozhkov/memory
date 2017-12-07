@@ -33,7 +33,6 @@ function readCode(path) {
 var nav = readTemplate("navbar.hbs");
 var main = readTemplate("main.hbs");
 var dictionaries = readTemplate("dictionaries.hbs");
-var languages = readTemplate("languages.hbs");
 var learn = readTemplate("learn.hbs");
 var statistics = readTemplate("statistics.hbs");
 
@@ -44,17 +43,18 @@ hs.registerPartial("scripts", scripts);
 
 // Get code
 var mainCode = readCode("main/");
+var dictCode = readCode("dict/");
+var statCode = readCode("stat/");
+var learnCode = readCode("learn/");
 
 // Compile templates
-var compMain = hs.compile(main)({ code: mainCode });
+var compMain = hs.compile(main)({ code: learnCode + dictCode + statCode + mainCode });
 var compDictionaries = hs.compile(dictionaries)();
-var compLanguages = hs.compile(languages)();
 var compLearn = hs.compile(learn)();
 var compStat = hs.compile(statistics)();
 
 // Write results
 fs.writeFileSync(outPath + "main.html", compMain);
 fs.writeFileSync(outPath + "dictionaries.html", compDictionaries);
-fs.writeFileSync(outPath + "languages.html", compLanguages);
 fs.writeFileSync(outPath + "learn.html", compLearn);
 fs.writeFileSync(outPath + "statistics.html", compStat);

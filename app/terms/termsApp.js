@@ -12,9 +12,6 @@ function doPost(event) {
 function navigate(path) {
     var template;
     switch (path) {
-        case "lang":
-            template = "languages";
-            break;
         case "dict":
             template = "dictionaries";
             break;
