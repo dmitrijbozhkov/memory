@@ -13,8 +13,7 @@ function iterateCell(sheet, row, col) {
 function findCell(toFind, isRow, numEmpty) {
     if (isRow === void 0) { isRow = true; }
     if (numEmpty === void 0) { numEmpty = 0; }
-    return function (sheet, row, col) {
-        var iter = iterateCell(sheet, row, col);
+    return function (iter) {
         var emptyCount = 0;
         var cell;
         var value;
@@ -43,4 +42,33 @@ function findCell(toFind, isRow, numEmpty) {
             }
         }
     };
+}
+function freeId(iter) {
+    var lastId = 0;
+    var currValue;
+    var cell;
+    while (true) {
+        cell = iter.value();
+        currValue = cell.getValue();
+        if (!currValue) {
+            return lastId + 1;
+        }
+        else {
+            if (lastId < currValue) {
+                lastId = currValue;
+            }
+        }
+        iter.next(1, 0);
+    }
+}
+function untilEmptyRow(iter, callback) {
+    var cell;
+    while (true) {
+        cell = iter.value();
+        if (!cell.getValue()) {
+            callback(cell);
+            return;
+        }
+        iter.next(1, 0);
+    }
 }

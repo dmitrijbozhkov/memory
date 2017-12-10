@@ -14,8 +14,12 @@ interface IReqEvent {
 
 const SHEET_ID = "1u5W1DZ0XJBU_IGhYyDbS1nNIqzhtdpupLXqGy77qC5g";
 
-function getSheet(): GoogleAppsScript.Spreadsheet.Spreadsheet {
-    return SpreadsheetApp.openById(SHEET_ID);
+function getDictSheet(): GoogleAppsScript.Spreadsheet.Sheet {
+    return SpreadsheetApp.openById(SHEET_ID).getSheetByName("Dictionaries");
+}
+
+function getActivitySheet(): GoogleAppsScript.Spreadsheet.Sheet {
+    return SpreadsheetApp.openById(SHEET_ID).getSheetByName("Activity");
 }
 
 function doGet(event: IReqEvent): GoogleAppsScript.HTML.HtmlOutput {

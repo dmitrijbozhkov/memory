@@ -1,9 +1,12 @@
 /// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
 declare var google: any;
 
+type CallbackEvent = JQuery.Event<HTMLElement, null>;
+
 interface IPageEvents {
-    setUp: () => void;
-    turnDown: () => void;
+    setUp: any;
+    turnDown: any;
+    [callbacks: string]: any;
 }
 
 enum Paths {
@@ -11,6 +14,21 @@ enum Paths {
     "learn",
     "stat"
 }
+
+const dictManager: IPageEvents = (function(sidebar, tabs, lookDict) {
+    let events = {
+        setUp: function() {
+            tabs.setUp({
+                lookDict: lookDict
+            });
+            sidebar.setUp([lookDict.changeDict]);
+        },
+        turnDown: function() {
+            sidebar.turnDown();
+        }
+    };
+    return events;
+})(Sidebar, Tabs, LookDict);
 
 (function() {
     let currEvents: IPageEvents = statManager;

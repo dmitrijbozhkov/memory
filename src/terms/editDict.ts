@@ -1,41 +1,45 @@
 /// <reference path="../../node_modules/@types/google-apps-script/index.d.ts" />
 
 function addDictionary(name: string) {
-    let sheet = getSheet();
-    if (sheet.getSheetByName(name)) {
-        throw new Error("Dictionary already exists");
-    } else {
-        let dict = sheet.insertSheet(name);
-        let headers = dict.getRange("A2:1");
-        headers.setFontSize(14);
-        headers.setBackground("#f4cccc");
-        addDictionaryList(name, sheet);
-    }
+    let list = getDictSheet();
+    let iterate = iterateCell(list, 3, 1);
+    let id = freeId(iterateCell(list, 3, 2));
+    untilEmptyRow(iterate, (cell) => {
+        cell.setValue(name);
+        list.getRange(cell.getRow(), 2).setValue(id);
+    });
 }
 
-function addDictionaryList(name: string, sheet: GoogleAppsScript.Spreadsheet.Spreadsheet) {
-    let list = sheet.getSheetByName("Main");
-    let iterate = iterateCell(list, 1, 1);
-    let cell;
-    while (true) {
-        cell = iterate.value();
-        if (!cell.getValue()) {
-            cell.setValue(name);
-            break;
-        }
-        iterate.next(1, 0);
-    }
+function addSubject(subjName: string, dictName: string) {
+    let sheet = getDictSheet();
+    let dict = findDictionary(dictName);
+    let id = freeId(iterateCell(sheet, 3, 3));
+    untilEmptyRow(iterateCell(sheet, 3, 5), (cell) => {
+        cell.setValue(subjName);
+        sheet.getRange(cell.getRow(), 3).setValue(id);
+        sheet.getRange(cell.getRow(), 4).setValue(dict);
+    });
 }
 
-function removeDictionary(name: string) {
-    let sheet = getSheet();
-    let dict = sheet.getSheetByName(name);
-    if (!dict) {
-        throw new Error("Dictionary already exists");
-    } else {
-        sheet.deleteSheet(dict);
-        let main = sheet.getSheetByName("Main");
-        let cell = findCell(name)(main, 1, 1);
-        cell.setValue(null);
-    }
+function addLanguage(name: string) {
+    let sheet = getDictSheet();
+    let id = freeId(iterateCell(sheet, 3, 6));
+    untilEmptyRow(iterateCell(sheet, 3, 7), (cell) => {
+        cell.setValue(name);
+        sheet.getRange(cell.getRow(), 6).setValue(id);
+    });
+}
+
+function addNewTerm(term: string, exp: string, subj: string, lang: string) {
+    let sheet = getDictSheet();
+    let id = freeId(iterateCell(sheet, 3, 8));
+    let subject = findSubject(subj);
+    let language = findLanguage(lang);
+    untilEmptyRow(iterateCell(sheet, 3, 11), (cell) => {
+        cell.setValue(term);
+        sheet.getRange(cell.getRow(), 12).setValue(exp);
+        sheet.getRange(cell.getRow(), 10).setValue(language);
+        sheet.getRange(cell.getRow(), 9).setValue(subject.id);
+        sheet.getRange(cell.getRow(), 8).setValue(id);
+    });
 }

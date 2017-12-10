@@ -1,50 +1,53 @@
 <div class="columns is-desktop">
-  <div class="column is-one-quater">
+  <div class="column is-one-quarter">
     <nav class="panel">
       <p class="panel-heading">
         Словари
       </p>
-      <div id="dictionaries"><a class="panel-block active">Немецкий</a></div>>
-      <div class="panel-block">
-        <button class="button is-link is-fullwidth is-success">
-          Добавить
-        </button>
-      </div>
+      <div id="dictionaries"></div>
     </nav>
   </div>
-  <div class="column">
+  <div class="column is-three-quarters">
     <div class="tabs is-boxed">
       <ul>
         <li class="is-active">
-          <a>
-            <span class="is-icon is-small"><i class="fa fa-search" aria-hidden="true"></i></span>
-            <span>Просмотр терминов</span>
+          <a id="lookTab">
+            <span class="is-icon is-small"><i class="fa fa-search"></i></span>
+            <span>Просмотр словаря</span>
           </a>
        </li>
         <li>
-          <a>
-            <span class="is-icon is-small"><i class="fa fa-language" aria-hidden="true"></i></span>
+          <a id="langTab">
+            <span class="is-icon is-small"><i class="fa fa-language"></i></span>
             <span>Языки</span>
           </a>
         </li>
         <li>
-          <a>
-            <span class="is-icon is-small"><i class="fa fa-hashtag" aria-hidden="true"></i></span>
+          <a id="subjTab">
+            <span class="is-icon is-small"><i class="fa fa-hashtag"></i></span>
             <span>Темы</span>
           </a>
         </li>
         <li>
-          <a>
-            <span class="is-icon is-small"><i class="fa fa-plus-square-o" aria-hidden="true"></i></span>
-            <span>Добавить термин</span>
+          <a id="termTab">
+            <span class="is-icon is-small"><i class="fa fa-id-card"></i></span>
+            <span>Термины</span>
+         </a>
+        </li>
+        <li>
+          <a id="editDict">
+            <span class="is-icon is-small"><i class="fa fa-book"></i></span>
+            <span>Словари</span>
          </a>
         </li>
       </ul>
     </div>
-    <section class="section is-paddingless">
-      <div class="container">
-        Тут будет инфа
-      </div>
-    </section>
+    <div id="dict-content">
+      <div class="content-section" id="look-content">{{>lookDict}}</div>
+      <div class="content-section" id="lang-content"></div>
+      <div class="content-section" id="subj-content"></div>
+      <div class="content-section" id="term-content"></div>
+      <div class="content-section" id="edit-content"></div>
+    </div>
   </div>
 </div>

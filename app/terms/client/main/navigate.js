@@ -5,6 +5,20 @@ var Paths;
     Paths[Paths["learn"] = 1] = "learn";
     Paths[Paths["stat"] = 2] = "stat";
 })(Paths || (Paths = {}));
+var dictManager = (function (sidebar, tabs, lookDict) {
+    var events = {
+        setUp: function () {
+            tabs.setUp({
+                lookDict: lookDict
+            });
+            sidebar.setUp([lookDict.changeDict]);
+        },
+        turnDown: function () {
+            sidebar.turnDown();
+        }
+    };
+    return events;
+})(Sidebar, Tabs, LookDict);
 (function () {
     var currEvents = statManager;
     var content = document.getElementById("pageContent");

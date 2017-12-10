@@ -1,7 +1,10 @@
 /// <reference path="../../node_modules/@types/google-apps-script/index.d.ts" />
 var SHEET_ID = "1u5W1DZ0XJBU_IGhYyDbS1nNIqzhtdpupLXqGy77qC5g";
-function getSheet() {
-    return SpreadsheetApp.openById(SHEET_ID);
+function getDictSheet() {
+    return SpreadsheetApp.openById(SHEET_ID).getSheetByName("Dictionaries");
+}
+function getActivitySheet() {
+    return SpreadsheetApp.openById(SHEET_ID).getSheetByName("Activity");
 }
 function doGet(event) {
     return HtmlService.createTemplateFromFile("main").evaluate();

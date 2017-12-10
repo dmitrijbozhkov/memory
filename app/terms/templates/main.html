@@ -57,6 +57,107 @@ var dictManager = (function () {
     return events;
 })();
 /// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
+var LookDict = (function () {
+    var currDict;
+    var chosenThemes = [];
+    var chosenSubjects = [];
+    var events = {
+        setUp: function (tabPages) {
+            $("#look-content").removeClass("is-hidden");
+            console.log("Dict lookup setup");
+        },
+        turnDown: function () {
+            console.log("Dict lookup turnDown");
+        },
+        changeDict: function (dict) {
+            console.log("dictionary is" + dict);
+            currDict = dict;
+        }
+    };
+    function clean() {
+        $("#choosen-themes")[0].innerHTML = "";
+    }
+    return events;
+})();
+/// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
+var Sidebar = (function () {
+    var currSubs;
+    var events = {
+        setUp: function (sub) {
+            currSubs = sub;
+            updateDicts();
+        },
+        turnDown: function () {
+            $(".dict-item").unbind("click");
+        }
+    };
+    function updateDicts() {
+        google.script.run.withSuccessHandler(pushDicts).getDictionaries();
+    }
+    function pushDicts(dicts) {
+        var dictNode = $("#dictionaries")[0];
+        if (dicts.length > 0) {
+            dictNode.innerHTML += "<a class=\"panel-block is-active dict-item\">" + dicts[0] + "</a>";
+            for (var i = 1; i < dicts.length; i += 1) {
+                dictNode.innerHTML += "<a class=\"panel-block dict-item\">" + dicts[i] + "</a>";
+            }
+            notifySubs(dicts[0]);
+            $(".dict-item").click(changeDict);
+        }
+    }
+    function notifySubs(dict) {
+        currSubs.forEach(function (sub) {
+            sub(dict);
+        });
+    }
+    function changeDict(event) {
+        event.preventDefault();
+        $("#dictionaries .is-active").toggleClass("is-active");
+        event.target.classList.toggle("is-active");
+        notifySubs(event.target.innerText);
+    }
+    return events;
+})();
+/// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
+var TabTypes;
+(function (TabTypes) {
+    TabTypes[TabTypes["lookDict"] = 0] = "lookDict";
+    TabTypes[TabTypes["lang"] = 1] = "lang";
+    TabTypes[TabTypes["subjects"] = 2] = "subjects";
+    TabTypes[TabTypes["editTerms"] = 3] = "editTerms";
+    TabTypes[TabTypes["editDict"] = 4] = "editDict";
+})(TabTypes || (TabTypes = {}));
+var Tabs = (function () {
+    var pages;
+    var currTab;
+    var events = {
+        setUp: function (tabPages) {
+            pages = tabPages;
+            currTab = TabTypes[0];
+            hideActiveTab();
+            pages.lookDict.setUp();
+            $("#lookTab").click(lookCallback);
+        },
+        turnDown: function () {
+            pages[currTab].turnDown();
+            $("#lookTab").unbind("click");
+        }
+    };
+    function hideActiveTab() {
+        $("#dict-content .content-section:not(.is-hidden)").addClass("is-hidden");
+    }
+    function nextTab(tabName) {
+        pages[currTab].turnDown();
+        currTab = tabName;
+    }
+    function lookCallback(event) {
+        hideActiveTab();
+        nextTab(TabTypes[0]);
+        pages.lookDict.setUp();
+    }
+    return events;
+})();
+/// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
 var statManager = (function () {
     var events = {
         setUp: function () {
@@ -75,6 +176,20 @@ var Paths;
     Paths[Paths["learn"] = 1] = "learn";
     Paths[Paths["stat"] = 2] = "stat";
 })(Paths || (Paths = {}));
+var dictManager = (function (sidebar, tabs, lookDict) {
+    var events = {
+        setUp: function () {
+            tabs.setUp({
+                lookDict: lookDict
+            });
+            sidebar.setUp([lookDict.changeDict]);
+        },
+        turnDown: function () {
+            sidebar.turnDown();
+        }
+    };
+    return events;
+})(Sidebar, Tabs, LookDict);
 (function () {
     var currEvents = statManager;
     var content = document.getElementById("pageContent");

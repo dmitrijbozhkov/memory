@@ -1,8 +1,13 @@
 /// <reference path="../../node_modules/@types/google-apps-script/index.d.ts" />
 
-type FindCallback = (range: GoogleAppsScript.Spreadsheet.Range) => void;
+interface ICellIterator {
+    next: (rowMove: number, colMove: number) => void;
+    value: () => GoogleAppsScript.Spreadsheet.Range;
+}
 
-function iterateCell(sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number, col: number) {
+type EmptyRowCallback = (cell: GoogleAppsScript.Spreadsheet.Range) => void;
+
+function iterateCell(sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number, col: number): ICellIterator {
     return {
         next: function(rowMove: number, colMove: number) {
             row += rowMove;
@@ -15,8 +20,7 @@ function iterateCell(sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number, col
 }
 
 function findCell(toFind: any, isRow = true, numEmpty = 0) {
-    return (sheet: GoogleAppsScript.Spreadsheet.Sheet, row: number, col: number) => {
-        let iter = iterateCell(sheet, row, col);
+    return (iter: ICellIterator) => {
         let emptyCount = 0;
         let cell: GoogleAppsScript.Spreadsheet.Range;
         let value;
@@ -42,4 +46,34 @@ function findCell(toFind: any, isRow = true, numEmpty = 0) {
             }
         }
     };
+}
+
+function freeId(iter: ICellIterator) {
+    let lastId = 0;
+    let currValue;
+    let cell;
+    while (true) {
+        cell = iter.value();
+        currValue = cell.getValue();
+        if (!currValue) {
+            return lastId + 1;
+        } else {
+            if (lastId < currValue) {
+                lastId = currValue;
+            }
+        }
+        iter.next(1, 0);
+    }
+}
+
+function untilEmptyRow(iter: ICellIterator, callback: EmptyRowCallback) {
+    let cell;
+    while (true) {
+        cell = iter.value();
+        if (!cell.getValue()) {
+            callback(cell);
+            return;
+        }
+        iter.next(1, 0);
+    }
 }

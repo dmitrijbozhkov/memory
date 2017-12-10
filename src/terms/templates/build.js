@@ -34,11 +34,13 @@ var main = readTemplate("main.hbs");
 var dictionaries = readTemplate("dictionaries.hbs");
 var learn = readTemplate("learn.hbs");
 var statistics = readTemplate("statistics.hbs");
+var lookDict = readTemplate("lookContent.hbs");
 
 // Register partials
 hs.registerPartial("navbar", nav);
 hs.registerPartial("head", head);
 hs.registerPartial("scripts", scripts);
+hs.registerPartial("lookDict", lookDict);
 
 // Get code
 var mainCode = readCode("main/");
